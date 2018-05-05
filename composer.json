@@ -1,0 +1,5 @@
+{
+    "require": {
+        "dms/meetup-api-client": "^2.3"
+    }
+}

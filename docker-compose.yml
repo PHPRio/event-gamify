@@ -1,0 +1,46 @@
+version: '3.1'
+services:
+  event_gamify_web:
+    image: webdevops/apache:latest
+    container_name: event_gamify_web
+    depends_on:
+      - event_gamify_php
+    ports:
+      - "8081:80"
+    volumes:
+      - .:/var/www/html
+    environment:
+      WEB_PHP_SOCKET: "event_gamify_php:9000"
+      WEB_DOCUMENT_ROOT: "/var/www/html"
+  event_gamify_php:
+    container_name: event_gamify_php
+    image: webdevops/php-dev:7.1
+    restart: always
+    env_file:
+      - ./dockerfiles/php/.env
+    volumes:
+      - .:/var/www/html
+    ports:
+      - 9003:9000
+    depends_on:
+      - event_gamify_db
+    links:
+      - event_gamify_db
+  event_gamify_composer:
+    container_name: event_gamify_composer
+    image: "composer"
+    volumes:
+      - ./:/app
+    command: install
+  event_gamify_db:
+    container_name: event_gamify_db
+    image: mysql:5.6.39
+    ports:
+      - "3308:3306"
+    volumes:
+      - ./mysql_initdb_event_gamify:/docker-entrypoint-initdb.d
+      - ./mysql_data_event_gamify:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=event_gamify
+
