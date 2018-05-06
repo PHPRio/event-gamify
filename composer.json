@@ -1,5 +1,6 @@
 {
     "require": {
-        "dms/meetup-api-client": "^2.3"
+        "dms/meetup-api-client": "^2.3",
+        "vlucas/phpdotenv": "^2.4"
     }
 }
